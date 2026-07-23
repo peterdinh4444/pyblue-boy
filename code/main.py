@@ -1,6 +1,6 @@
 from settings import *
 from pytmx.util_pygame import load_pygame
-from os.path import join #for file handling OS
+from os.path import join, dirname, abspath #for file handling OS
 class Game:
     def __init__(self):
         pygame.init()
@@ -10,7 +10,9 @@ class Game:
         self.import_assets()
 
     def import_assets(self):
-        self.tmx_maps = {'world': load_pygame(join('..', 'data', 'maps', 'world.tmx'))}
+        BASE_DIR = dirname(abspath(__file__))
+        map_path = join(BASE_DIR, '..', 'data', 'maps', 'world.tmx')
+        self.tmx_maps = {'world': load_pygame(map_path)}
         print(self.tmx_maps)
         
     def run(self):

@@ -4,15 +4,17 @@ from os.path import join, dirname, abspath #for file handling OS
 
 from sprites import Sprite
 from entities import Player
+from groups import AllSprites
 
 class Game:
     def __init__(self):
         pygame.init()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('Pyboy-Blue')
+        self.clock = pygame.time.Clock()
 
         # groups
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
 
 
         self.import_assets()
@@ -30,10 +32,17 @@ class Game:
             Sprite((x*TILE_SIZE,y*TILE_SIZE), surf, self.all_sprites)
 
         for obj in tmx_map.get_layer_by_name('Entities'):
-            print(obj)
+            if obj.name == 'Player' and obj.properties['pos'] == player_start_pos: 
+                self.player = Player((obj.x, obj.y), self.all_sprites)
+
+        for obj in tmx_map.get_layer_by_name('Objects'):
+            Sprite((obj.x, obj.y), obj.image, self.all_sprites)
+
+        
 
     def run(self):
         while True:
+            dt = self.clock.tick(100) / 1000
             # event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -42,7 +51,9 @@ class Game:
 
 
             # game logic
-            self.all_sprites.draw(self.display_surface)
+            self.all_sprites.update(dt)
+            self.display_surface.fill('black')
+            self.all_sprites.draw(self.player.rect.center)
             pygame.display.update()
 
 

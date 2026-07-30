@@ -1,5 +1,6 @@
 from settings import *
 
+# Inherit Group class to implement camera system
 class AllSprites(pygame.sprite.Group):
     def __init__(self):
         super().__init__()

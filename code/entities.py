@@ -22,7 +22,6 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_RIGHT]:
             input_vector.x += 1
         self.direction = input_vector
-        print(input_vector)
 
 
     def move(self, dt):
